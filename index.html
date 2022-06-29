@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="search-results"></div>
+    <form method="GET" id="search-form">
+        <input type="search" name="search_item">
+        <button>Search</button>
+    </form>
+
+    <script src="axios.min.js"></script>
+
+    <script>
+        document.querySelector("#search-form").addEventListener("submit", async function(event){
+            event.preventDefault();
+
+            let search_item = this.search_item.value.trim();
+
+            if(search_item.length != 0){
+                //proceed
+                //send the data to the server
+                const feedback = await axios.get("http://localhost:4000/search")
+
+                console.log(feedback.data.data);
+
+                //add the data to the page
+                let searchResults = document.querySelector("#search-results");
+                let data = feedback.data.data;
+                searchResults.innerHTML = `<h3>You have ${data.length} results</h3>`;
+                for(let i = 0; i < data.length; i++){
+                    searchResults.innerHTML += `<div>
+                                                    <h5>${data[i].name}</h5>
+                                                    <h6>${data[i].email}</h6>
+                                                </div>
+                                                <hr>
+                                                `
+
+                }
+
+
+
+
+
+
+            }
+
+
+        })
+
+    </script>
+</body>
+</html>
